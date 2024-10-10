@@ -48,6 +48,10 @@ router.post('/login', (req, res, next) => {
         }
     }
     else {
+        functionBadPassword();
+    }
+
+    function functionBadPassword() {
         console.log("bad user");
         req.session.errors = "Utilisateur inconnu";
         res.redirect('/users');
