@@ -23,13 +23,7 @@ router.post('/login', (req, res, next) => {
     const userFound = User.find(req.body.userLogin);
     console.log("User found" + JSON.stringify(userFound));
     if (userFound) {
-        if (userFound.active == false) {
-            req.session.errors = "Compte désactivé";
-            res.redirect('/users');
-        }
-        else {
-            toLogIn(req, userFound, res);
-        }
+        isActive(userFound, req, res);
     }
     else {
         console.log("bad user");
@@ -80,6 +74,16 @@ router.post('/add', (req, res, next) => {
 });
 
 module.exports = router;
+
+function isActive(userFound, req, res) {
+    if (userFound.active == false) {
+        req.session.errors = "Compte désactivé";
+        res.redirect('/users');
+    }
+    else {
+        toLogIn(req, userFound, res);
+    }
+}
 
 function toLogIn(req, userFound, res) {
     if (bcrypt.compareSync(req.body.userPassword, userFound.password)) {
